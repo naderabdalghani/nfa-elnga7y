@@ -1,4 +1,5 @@
 import sys
+import re
 
 from constansts import NUM_INPUT_ARGUMENTS
 from pretty_printer import PrettyPrinter
@@ -6,8 +7,25 @@ from pretty_printer import PrettyPrinter
 printer = PrettyPrinter()
 
 
-def main():
+def validate_regex(regex):
+    try:
+        re.compile(regex)
+    except re.error as error:
+        printer("Invalid regular expression entered: " + error.msg, level=PrettyPrinter.ERROR)
+        input("\n\nPress Enter to exit...")
+        sys.exit(1)
+
+
+def parse_regex(regex):
     pass
+
+
+def construct_nfa(regex):
+    pass
+
+
+def main(regex):
+    validate_regex(regex)
 
 
 if __name__ == '__main__':
@@ -21,4 +39,4 @@ if __name__ == '__main__':
         input("\n\nPress Enter to exit...")
         sys.exit(1)
 
-    regular_expression = sys.argv[2]
+    main(sys.argv[2])
