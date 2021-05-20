@@ -1,7 +1,7 @@
 import sys
 import re
 
-from constansts import NUM_INPUT_ARGUMENTS
+from constansts import NUM_INPUT_ARGUMENTS, OPERATORS, OPERATORS_PRECEDENCE
 from pretty_printer import PrettyPrinter
 
 printer = PrettyPrinter()
@@ -16,8 +16,47 @@ def validate_regex(regex):
         sys.exit(1)
 
 
+def has_lower_precedence(operator_1, operator_2):
+    return OPERATORS_PRECEDENCE.get(operator_1, 0) <= OPERATORS_PRECEDENCE.get(operator_2, 0)
+
+
+def insert_explicit_concat_operators(infix_tokens):
+    infix_tokens_with_concat_symbol = []
+    previous_token = None
+    for current_token in infix_tokens:
+        if previous_token is not None:
+            if (current_token not in OPERATORS and previous_token not in OPERATORS) or \
+                    (previous_token == '*' and (current_token not in OPERATORS or current_token == '(')) or \
+                    (previous_token == ')' and (current_token == '(' or current_token not in OPERATORS)):
+                infix_tokens_with_concat_symbol.append('.')
+        infix_tokens_with_concat_symbol.append(current_token)
+        previous_token = current_token
+    return infix_tokens_with_concat_symbol
+
+
 def parse_regex(regex):
-    pass
+    infix_regex = list(regex.strip())
+    infix_regex = insert_explicit_concat_operators(infix_regex)
+    postfix_regex = []
+    operators_stack = []
+    for token in infix_regex:
+        if token in OPERATORS:
+            if token == '(':
+                operators_stack.append(token)
+            elif token == ')':
+                popped_token = operators_stack.pop()
+                while popped_token != '(':
+                    postfix_regex.append(popped_token)
+                    popped_token = operators_stack.pop()
+            else:
+                while len(operators_stack) != 0 and has_lower_precedence(token, operators_stack[-1]):
+                    postfix_regex.append(operators_stack.pop())
+                operators_stack.append(token)
+        else:
+            postfix_regex.append(token)
+    operators_stack.reverse()
+    postfix_regex += operators_stack
+    return postfix_regex
 
 
 def construct_nfa(regex):
@@ -26,6 +65,7 @@ def construct_nfa(regex):
 
 def main(regex):
     validate_regex(regex)
+    postfix_regex = parse_regex(regex)
 
 
 if __name__ == '__main__':
