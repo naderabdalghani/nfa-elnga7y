@@ -72,6 +72,10 @@ def construct_nfa(postfix_regex):
             num_required_operands = OPERATORS_REQUIRED_OPERANDS.get(token, 2)
             operands = []
             for i in range(num_required_operands):
+                if len(operands_stack) == 0:
+                    operands.append(EPSILON)
+                    operands.reverse()
+                    break
                 operands.append(operands_stack.pop())
             operands.reverse()
             operands_stack.append(do_operation(operands, token))
