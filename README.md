@@ -168,8 +168,6 @@ Output NFA PNG image:
 
 * Activate the virtual environment, if any:
 
-	`python main.py "<regex>"`
-
     - Mac OS or Linux:
 
         `source venv/bin/activate`
