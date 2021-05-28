@@ -101,4 +101,4 @@ if __name__ == '__main__':
         input("\n\nPress Enter to exit...")
         sys.exit(1)
 
-    main(sys.argv[2])
+    main(sys.argv[1])
