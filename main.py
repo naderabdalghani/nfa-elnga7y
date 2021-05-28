@@ -1,8 +1,9 @@
-import sys
 import re
+import sys
 
-from constansts import NUM_INPUT_ARGUMENTS, OPERATORS, OPERATORS_PRECEDENCE, OPERATORS_REQUIRED_OPERANDS, EPSILON
 from automaton import do_operation
+from constansts import (EPSILON, NUM_INPUT_ARGUMENTS, OPERATORS,
+                        OPERATORS_PRECEDENCE, OPERATORS_REQUIRED_OPERANDS)
 from pretty_printer import PrettyPrinter
 
 printer = PrettyPrinter()
@@ -102,3 +103,5 @@ if __name__ == '__main__':
         sys.exit(1)
 
     main(sys.argv[1])
+
+    printer("Successfully converted the input regular expression to its corresponding NFA", PrettyPrinter.SUCCESS)
