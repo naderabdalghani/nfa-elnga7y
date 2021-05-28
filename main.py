@@ -87,6 +87,7 @@ def main(regex):
     postfix_regex = parse_regex(regex)
     nfa = construct_nfa(postfix_regex)
     nfa.print_to_file()
+    nfa.render_image()
 
 
 if __name__ == '__main__':

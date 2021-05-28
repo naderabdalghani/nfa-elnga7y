@@ -1,4 +1,5 @@
 import json
+from graphviz import Digraph
 
 from constansts import EPSILON
 
@@ -30,6 +31,21 @@ class Automaton:
                     output_dict[state.symbol][input_key] = state.input_dict[input_key]
         with open('nfa.json', 'w') as f:
             json.dump(output_dict, f, indent=4)
+    def render_image(self):
+        graph = Digraph(graph_attr={'rankdir': 'LR'})
+        graph.node('', shape='none')
+        for state in self.states:
+            if state == self.states[-1]:
+                graph.node(state.symbol, shape='doublecircle')
+            else:
+                graph.node(state.symbol, shape='circle')
+        for state in self.states:
+            if state.input_dict is not None:
+                for input_key in state.input_dict:
+                    for connected_state in state.input_dict[input_key]:
+                        graph.edge(state.symbol, connected_state, label=input_key)
+        graph.edge('', self.states[0].symbol)
+        graph.unflatten().render('./nfa', view=True, format='png', cleanup=True)
 
 
 def do_operation(operands, operation):
