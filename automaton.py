@@ -1,5 +1,7 @@
 import json
 
+from constansts import EPSILON
+
 LAST_USED_STATE_INDEX = -1
 
 
@@ -37,12 +39,12 @@ def do_operation(operands, operation):
         if isinstance(operands[0], Automaton) and isinstance(operands[1], Automaton):
             states = operands[0].states
             LAST_USED_STATE_INDEX += 1
-            states[-1].input_dict = {'Epsilon': [operands[1].states[0].symbol]}
+            states[-1].input_dict = {EPSILON: [operands[1].states[0].symbol]}
             states += operands[1].states
         elif isinstance(operands[0], Automaton):
             states = operands[0].states
             LAST_USED_STATE_INDEX += 1
-            states[-1].input_dict = {'Epsilon': ['S' + str(LAST_USED_STATE_INDEX)]}
+            states[-1].input_dict = {EPSILON: ['S' + str(LAST_USED_STATE_INDEX)]}
             states.append(State('S' + str(LAST_USED_STATE_INDEX),
                                 {operands[1]: ['S' + str(LAST_USED_STATE_INDEX + 1)]}))
             LAST_USED_STATE_INDEX += 1
@@ -53,7 +55,7 @@ def do_operation(operands, operation):
                                 {operands[0]: ['S' + str(LAST_USED_STATE_INDEX + 1)]}))
             LAST_USED_STATE_INDEX += 1
             states.append(State('S' + str(LAST_USED_STATE_INDEX),
-                                {'Epsilon': [operands[1].states[0].symbol]}))
+                                {EPSILON: [operands[1].states[0].symbol]}))
             states += operands[1].states
         else:
             LAST_USED_STATE_INDEX += 1
@@ -61,7 +63,7 @@ def do_operation(operands, operation):
                                 {operands[0]: ['S' + str(LAST_USED_STATE_INDEX + 1)]}))
             LAST_USED_STATE_INDEX += 1
             states.append(State('S' + str(LAST_USED_STATE_INDEX),
-                                {'Epsilon': ['S' + str(LAST_USED_STATE_INDEX + 1)]}))
+                                {EPSILON: ['S' + str(LAST_USED_STATE_INDEX + 1)]}))
             LAST_USED_STATE_INDEX += 1
             states.append(State('S' + str(LAST_USED_STATE_INDEX),
                                 {operands[1]: ['S' + str(LAST_USED_STATE_INDEX + 1)]}))
@@ -72,19 +74,19 @@ def do_operation(operands, operation):
         if isinstance(operands[0], Automaton) and isinstance(operands[1], Automaton):
             LAST_USED_STATE_INDEX += 1
             states.append(State('S' + str(LAST_USED_STATE_INDEX),
-                                {'Epsilon': [
+                                {EPSILON: [
                                     operands[0].states[0].symbol,
                                     operands[1].states[0].symbol
                                 ]}))
             LAST_USED_STATE_INDEX += 1
-            operands[0].states[-1].input_dict = {'Epsilon': ['S' + str(LAST_USED_STATE_INDEX)]}
-            operands[1].states[-1].input_dict = {'Epsilon': ['S' + str(LAST_USED_STATE_INDEX)]}
+            operands[0].states[-1].input_dict = {EPSILON: ['S' + str(LAST_USED_STATE_INDEX)]}
+            operands[1].states[-1].input_dict = {EPSILON: ['S' + str(LAST_USED_STATE_INDEX)]}
             states += operands[0].states + operands[1].states
             states.append(State('S' + str(LAST_USED_STATE_INDEX)))
         elif isinstance(operands[0], Automaton):
             LAST_USED_STATE_INDEX += 1
             states.append(State('S' + str(LAST_USED_STATE_INDEX),
-                                {'Epsilon': [
+                                {EPSILON: [
                                     operands[0].states[0].symbol,
                                     'S' + str(LAST_USED_STATE_INDEX + 1)
                                 ]}))
@@ -93,15 +95,15 @@ def do_operation(operands, operation):
                                 {operands[1]: ['S' + str(LAST_USED_STATE_INDEX + 1)]}))
             LAST_USED_STATE_INDEX += 1
             states.append(State('S' + str(LAST_USED_STATE_INDEX),
-                                {'Epsilon': ['S' + str(LAST_USED_STATE_INDEX + 1)]}))
+                                {EPSILON: ['S' + str(LAST_USED_STATE_INDEX + 1)]}))
             LAST_USED_STATE_INDEX += 1
-            operands[0].states[-1].input_dict = {'Epsilon': ['S' + str(LAST_USED_STATE_INDEX)]}
+            operands[0].states[-1].input_dict = {EPSILON: ['S' + str(LAST_USED_STATE_INDEX)]}
             states += operands[0].states
             states.append(State('S' + str(LAST_USED_STATE_INDEX)))
         elif isinstance(operands[1], Automaton):
             LAST_USED_STATE_INDEX += 1
             states.append(State('S' + str(LAST_USED_STATE_INDEX),
-                                {'Epsilon': [
+                                {EPSILON: [
                                     'S' + str(LAST_USED_STATE_INDEX + 1),
                                     operands[1].states[0].symbol
                                 ]}))
@@ -110,15 +112,15 @@ def do_operation(operands, operation):
                                 {operands[0]: ['S' + str(LAST_USED_STATE_INDEX + 1)]}))
             LAST_USED_STATE_INDEX += 1
             states.append(State('S' + str(LAST_USED_STATE_INDEX),
-                                {'Epsilon': ['S' + str(LAST_USED_STATE_INDEX + 1)]}))
+                                {EPSILON: ['S' + str(LAST_USED_STATE_INDEX + 1)]}))
             LAST_USED_STATE_INDEX += 1
-            operands[1].states[-1].input_dict = {'Epsilon': ['S' + str(LAST_USED_STATE_INDEX)]}
+            operands[1].states[-1].input_dict = {EPSILON: ['S' + str(LAST_USED_STATE_INDEX)]}
             states += operands[1].states
             states.append(State('S' + str(LAST_USED_STATE_INDEX)))
         else:
             LAST_USED_STATE_INDEX += 1
             states.append(State('S' + str(LAST_USED_STATE_INDEX),
-                                {'Epsilon': [
+                                {EPSILON: [
                                     'S' + str(LAST_USED_STATE_INDEX + 1),
                                     'S' + str(LAST_USED_STATE_INDEX + 2)
                                 ]}))
@@ -130,10 +132,10 @@ def do_operation(operands, operation):
                                 {operands[1]: ['S' + str(LAST_USED_STATE_INDEX + 2)]}))
             LAST_USED_STATE_INDEX += 1
             states.append(State('S' + str(LAST_USED_STATE_INDEX),
-                                {'Epsilon': ['S' + str(LAST_USED_STATE_INDEX + 2)]}))
+                                {EPSILON: ['S' + str(LAST_USED_STATE_INDEX + 2)]}))
             LAST_USED_STATE_INDEX += 1
             states.append(State('S' + str(LAST_USED_STATE_INDEX),
-                                {'Epsilon': ['S' + str(LAST_USED_STATE_INDEX + 1)]}))
+                                {EPSILON: ['S' + str(LAST_USED_STATE_INDEX + 1)]}))
             LAST_USED_STATE_INDEX += 1
             states.append(State('S' + str(LAST_USED_STATE_INDEX)))
         return Automaton(states)
@@ -141,11 +143,11 @@ def do_operation(operands, operation):
         if isinstance(operands[0], Automaton):
             LAST_USED_STATE_INDEX += 1
             states.append(State('S' + str(LAST_USED_STATE_INDEX),
-                                {'Epsilon': [
+                                {EPSILON: [
                                     operands[0].states[0].symbol,
                                     'S' + str(LAST_USED_STATE_INDEX + 1)
                                 ]}))
-            operands[0].states[-1].input_dict = {'Epsilon': [
+            operands[0].states[-1].input_dict = {EPSILON: [
                 'S' + str(LAST_USED_STATE_INDEX),
                 'S' + str(LAST_USED_STATE_INDEX + 1)
             ]}
@@ -155,7 +157,7 @@ def do_operation(operands, operation):
         else:
             LAST_USED_STATE_INDEX += 1
             states.append(State('S' + str(LAST_USED_STATE_INDEX),
-                                {'Epsilon': [
+                                {EPSILON: [
                                     'S' + str(LAST_USED_STATE_INDEX + 1),
                                     'S' + str(LAST_USED_STATE_INDEX + 3)
                                 ]}))
@@ -164,7 +166,7 @@ def do_operation(operands, operation):
                                 {operands[0]: ['S' + str(LAST_USED_STATE_INDEX + 1)]}))
             LAST_USED_STATE_INDEX += 1
             states.append(State('S' + str(LAST_USED_STATE_INDEX),
-                                {'Epsilon': [
+                                {EPSILON: [
                                     'S' + str(LAST_USED_STATE_INDEX - 2),
                                     'S' + str(LAST_USED_STATE_INDEX + 1)
                                 ]}))
