@@ -29,8 +29,9 @@ class Automaton:
             if state.input_dict is not None:
                 for input_key in state.input_dict:
                     output_dict[state.symbol][input_key] = state.input_dict[input_key]
-        with open('nfa.json', 'w') as f:
-            json.dump(output_dict, f, indent=4)
+        with open('nfa.json', 'w', encoding='utf-8') as f:
+            json.dump(output_dict, f, indent=4, ensure_ascii=False)
+
     def render_image(self):
         graph = Digraph(graph_attr={'rankdir': 'LR'})
         graph.node('', shape='none')
