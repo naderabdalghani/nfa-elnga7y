@@ -177,4 +177,4 @@ crashlytics-build.properties
 fabric.properties
 
 # Project Custom
-nfa.json
+nfa.*
