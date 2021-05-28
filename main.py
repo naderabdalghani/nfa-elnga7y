@@ -1,7 +1,8 @@
 import sys
 import re
 
-from constansts import NUM_INPUT_ARGUMENTS, OPERATORS, OPERATORS_PRECEDENCE
+from constansts import NUM_INPUT_ARGUMENTS, OPERATORS, OPERATORS_PRECEDENCE, OPERATORS_REQUIRED_OPERANDS
+from finite_automata import do_operation
 from pretty_printer import PrettyPrinter
 
 printer = PrettyPrinter()
@@ -60,13 +61,25 @@ def parse_regex(regex):
     return postfix_regex
 
 
-def construct_nfa(regex):
-    pass
+def construct_nfa(postfix_regex):
+    operands_stack = []
+    for token in postfix_regex:
+        if token not in OPERATORS:
+            operands_stack.append(token)
+        else:
+            num_required_operands = OPERATORS_REQUIRED_OPERANDS.get(token, 2)
+            operands = []
+            for i in range(num_required_operands):
+                operands.append(operands_stack.pop())
+            operands.reverse()
+            operands_stack.append(do_operation(operands, token))
+    return operands_stack.pop()
 
 
 def main(regex):
     validate_regex(regex)
     postfix_regex = parse_regex(regex)
+    nfa = construct_nfa(postfix_regex)
 
 
 if __name__ == '__main__':
