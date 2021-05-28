@@ -27,7 +27,8 @@ def insert_explicit_concat_operators(infix_tokens):
         if previous_token is not None:
             if (current_token not in OPERATORS and previous_token not in OPERATORS) or \
                     (previous_token == '*' and (current_token not in OPERATORS or current_token == '(')) or \
-                    (previous_token == ')' and (current_token == '(' or current_token not in OPERATORS)):
+                    (previous_token == ')' and (current_token == '(' or current_token not in OPERATORS)) or \
+                    (previous_token not in OPERATORS and current_token == '('):
                 infix_tokens_with_concat_symbol.append('.')
         infix_tokens_with_concat_symbol.append(current_token)
         previous_token = current_token
