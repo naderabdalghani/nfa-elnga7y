@@ -1,7 +1,7 @@
 import sys
 import re
 
-from constansts import NUM_INPUT_ARGUMENTS, OPERATORS, OPERATORS_PRECEDENCE, OPERATORS_REQUIRED_OPERANDS
+from constansts import NUM_INPUT_ARGUMENTS, OPERATORS, OPERATORS_PRECEDENCE, OPERATORS_REQUIRED_OPERANDS, EPSILON
 from automaton import do_operation
 from pretty_printer import PrettyPrinter
 
@@ -22,6 +22,8 @@ def has_lower_precedence(operator_1, operator_2):
 
 
 def insert_explicit_concat_operators(infix_tokens):
+    if len(infix_tokens) == 1:
+        return infix_tokens + ['.', EPSILON]
     infix_tokens_with_concat_symbol = []
     previous_token = None
     for current_token in infix_tokens:
