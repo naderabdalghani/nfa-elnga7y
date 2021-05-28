@@ -2,7 +2,7 @@ import sys
 import re
 
 from constansts import NUM_INPUT_ARGUMENTS, OPERATORS, OPERATORS_PRECEDENCE, OPERATORS_REQUIRED_OPERANDS
-from finite_automata import do_operation
+from automaton import do_operation
 from pretty_printer import PrettyPrinter
 
 printer = PrettyPrinter()
