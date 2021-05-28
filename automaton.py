@@ -1,3 +1,5 @@
+import json
+
 LAST_USED_STATE_INDEX = -1
 
 
@@ -12,7 +14,20 @@ class Automaton:
         self.states = states
 
     def print_to_file(self):
-        pass
+        if self.states is None:
+            return
+        output_dict = {
+            "startingState": self.states[0].symbol
+        }
+        for state in self.states:
+            output_dict[state.symbol] = {
+                "isTerminatingState": state == self.states[-1]
+            }
+            if state.input_dict is not None:
+                for input_key in state.input_dict:
+                    output_dict[state.symbol][input_key] = state.input_dict[input_key]
+        with open('nfa.json', 'w') as f:
+            json.dump(output_dict, f, indent=4)
 
 
 def do_operation(operands, operation):
@@ -62,8 +77,8 @@ def do_operation(operands, operation):
                                     operands[1].states[0].symbol
                                 ]}))
             LAST_USED_STATE_INDEX += 1
-            operands[0].states[-1].input_dict = {'Epsilon':  ['S' + str(LAST_USED_STATE_INDEX)]}
-            operands[1].states[-1].input_dict = {'Epsilon':  ['S' + str(LAST_USED_STATE_INDEX)]}
+            operands[0].states[-1].input_dict = {'Epsilon': ['S' + str(LAST_USED_STATE_INDEX)]}
+            operands[1].states[-1].input_dict = {'Epsilon': ['S' + str(LAST_USED_STATE_INDEX)]}
             states += operands[0].states + operands[1].states
             states.append(State('S' + str(LAST_USED_STATE_INDEX)))
         elif isinstance(operands[0], Automaton):
@@ -130,7 +145,7 @@ def do_operation(operands, operation):
                                     operands[0].states[0].symbol,
                                     'S' + str(LAST_USED_STATE_INDEX + 1)
                                 ]}))
-            operands[0].states[-1].input_dict = {'Epsilon':  [
+            operands[0].states[-1].input_dict = {'Epsilon': [
                 'S' + str(LAST_USED_STATE_INDEX),
                 'S' + str(LAST_USED_STATE_INDEX + 1)
             ]}

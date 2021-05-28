@@ -80,6 +80,7 @@ def main(regex):
     validate_regex(regex)
     postfix_regex = parse_regex(regex)
     nfa = construct_nfa(postfix_regex)
+    nfa.print_to_file()
 
 
 if __name__ == '__main__':
